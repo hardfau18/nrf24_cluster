@@ -33,7 +33,8 @@ int spi_init(char file_name[40]){
 }
 
 int main(){
-    memset(tx_buf, 0x55, 50);
+    memset(tx_buf, 0x41, 10);
+    memset(tx_buf+10, 0x42, 10);
     xfer[0].tx_buf = (unsigned long)tx_buf;
     xfer[1].rx_buf = (unsigned long)rx_buf;
     int fd = spi_init("/dev/spidev0.0");
@@ -42,5 +43,7 @@ int main(){
         printf("failed to transfer with status %d\n", status);
         return -1;
     }
+    rx_buf[20]=0;
+    puts(rx_buf);
     return 0;
 }
