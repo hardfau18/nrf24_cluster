@@ -11,7 +11,7 @@
 char rx_buf[100];
 char tx_buf[100];
 
-struct spi_ioc_transfer xfer[2];
+struct spi_ioc_transfer xfer;
 
 int spi_init(char file_name[40]){
     int fd = open(file_name, O_RDWR);
@@ -21,22 +21,18 @@ int spi_init(char file_name[40]){
         return -1;
     }
 
-    xfer[0].len = 20;                                            // len of command write
-    xfer[0].bits_per_word = 8;
-    xfer[0].cs_change = 0;
-    xfer[0].speed_hz = 100000;
-    xfer[1].len = 20;                                            // len of command write
-    xfer[1].bits_per_word = 8;
-    xfer[1].cs_change = 0;
-    xfer[1].speed_hz = 100000;
+    xfer.len = 20;                                            // len of command write
+    xfer.bits_per_word = 8;
+    xfer.cs_change = 0;
+    xfer.speed_hz = 100000;
+    xfer.tx_buf = (unsigned long)tx_buf;
+    xfer.rx_buf = (unsigned long)rx_buf;
     return fd;
 }
 
 int main(){
     memset(tx_buf, 0x41, 10);
     memset(tx_buf+10, 0x42, 10);
-    xfer[0].tx_buf = (unsigned long)tx_buf;
-    xfer[1].rx_buf = (unsigned long)rx_buf;
     int fd = spi_init("/dev/spidev0.0");
     int status = ioctl(fd, SPI_IOC_MESSAGE(2), xfer);
     if (status < 0){
