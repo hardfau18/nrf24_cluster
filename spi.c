@@ -59,9 +59,9 @@ int spi_init(char file_name[40]){
     printf("bits_per_word   = %u \n", bits);
 
     xfer.len = 20;                                            // len of command write
-    xfer.bits_per_word = 8;
+    xfer.bits_per_word = bits;
     xfer.cs_change = 0;
-    xfer.speed_hz = 100000;
+    xfer.speed_hz = speed;
     xfer.tx_buf = (unsigned long)tx_buf;
     xfer.rx_buf = (unsigned long)rx_buf;
     return fd;
