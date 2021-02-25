@@ -34,7 +34,7 @@ int main(){
     memset(tx_buf, 0x41, 10);
     memset(tx_buf+10, 0x42, 10);
     int fd = spi_init("/dev/spidev0.0");
-    int status = ioctl(fd, SPI_IOC_MESSAGE(2), xfer);
+    int status = ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
     if (status < 0){
         printf("failed to transfer with status %d\n", status);
         return -1;
