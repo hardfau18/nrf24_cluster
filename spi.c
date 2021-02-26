@@ -99,10 +99,10 @@ int main(){
 // TODO: Later change this to /sys filesystem
 void config_pins(){
     int status;
-    if ((status = system( "echo something ; false ; echo line 2")) < 0){
+    if ((status = system( " echo something &&\
+                    echo line 2 &&\
+                    echo line 3")) < 0){
         printf( "couldn't execute config commands\nreturn status %d", status);
         exit(1);
     }
-    printf("success : %d\n", status);
-    exit(0);
 }
