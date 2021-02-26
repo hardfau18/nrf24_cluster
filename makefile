@@ -29,5 +29,5 @@ $(build_dir):
 clean:
 	rm -rf $(build_dir)
 
-run:
+run: $(build_dir)/$(project).elf
 	@$(build_dir)/$(project).elf
