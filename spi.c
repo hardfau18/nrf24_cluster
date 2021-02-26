@@ -18,6 +18,23 @@ struct spi_ioc_transfer xfer;
 
 void config_pins(void);
 
+// transmits the content of buf to reciever and writes the recieved content to same buffer
+// returns the return status of ioctl transfer
+// @ fd - filedescriptor of spi transfer
+// @ len - length of the buffer
+// @ buf - transfer buffer
+int spi_transfer(int fd, uint32_t len, uint8_t* buf);
+// returns the return status of ioctl transfer
+// @ fd - filedescriptor of spi transfer
+// @ len - length of the buffer
+// @ buf - transfer buffer
+int spi_read(int fd, uint32_t len, uint8_t* buf);
+// returns the return status of ioctl transfer
+// @ fd - filedescriptor of spi transfer
+// @ len - length of the buffer
+// @ buf - transfer buffer
+int spi_write(int fd, uint32_t len, uint8_t* buf);
+
 int spi_init(char file_name[40]){
     config_pins();
     int fd, ret; 
@@ -63,12 +80,9 @@ int spi_init(char file_name[40]){
     printf("speed           = %u \n", speed);
     printf("bits_per_word   = %u \n", bits);
 
-    xfer.len = 20;                                            // len of command write
     xfer.bits_per_word = bits;
     xfer.cs_change = 0;
     xfer.speed_hz = speed;
-    xfer.tx_buf = (unsigned long)tx_buf;
-    xfer.rx_buf = (unsigned long)rx_buf;
     return fd;
 }
 
@@ -83,15 +97,10 @@ int main(){
     if ((fd = spi_init("/dev/spidev0.0"))< 0)
         return -1;
 
-    // transfer 1 set of data
-    if ((status = ioctl(fd, SPI_IOC_MESSAGE(1), &xfer)) <0){
-        printf("failed to transfer with status %d\n", status);
-        close(fd);
-        return -1;
-    }
-
-    rx_buf[20]=0;
-    puts(rx_buf);
+    if (spi_read(fd, 20, (uint8_t*)tx_buf) < 0)
+        fprintf(stderr, "failed to transfer\n");
+    tx_buf[20]=0;
+    puts(tx_buf);
     close(fd);
     return 0;
 }
@@ -146,4 +155,33 @@ void config_pins(){
         }
         close(fd);
     }
+}
+
+int spi_transfer(int fd, uint32_t len, uint8_t* buf){
+    int status;
+    // same buffer can be used to read and write, checked
+    xfer.tx_buf = (unsigned long)buf;
+    xfer.rx_buf = (unsigned long)buf;
+    xfer.len = len;
+    status = ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
+    return status;
+}
+
+// TODO change this to macro so that transfer func only used for comm
+int spi_read(int fd, uint32_t len, uint8_t* buf){
+    int status;
+    xfer.tx_buf = (unsigned long)NULL;                      // if reading then keep tx buffer empty
+    xfer.rx_buf = (unsigned long)buf;
+    xfer.len = len;
+    status = ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
+    return status;
+}
+// TODO change this to macro so that transfer func only used for comm
+int spi_write(int fd, uint32_t len, uint8_t* buf){
+    int status;
+    xfer.tx_buf = (unsigned long)buf;
+    xfer.rx_buf = (unsigned long)NULL;                      // if writing then keep tx buffer empty
+    xfer.len = len;
+    status = ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
+    return status;
 }
