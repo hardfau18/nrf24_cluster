@@ -105,7 +105,7 @@ void config_pins(){
         exit(-1);
     } else{
         if (write(fd, "spi_cs", 6) < 0){
-            printf("write to p9_17 failed");
+            puts("write to p9_17 failed");
             exit(1);
         }
         close(fd);
@@ -116,8 +116,8 @@ void config_pins(){
         puts("failed to open P9_18_pinmux");
         exit(-1);
     } else{
-        if (write(fd, "spi", 6) < 0){
-            printf("write to p9_18 failed");
+        if (write(fd, "spi", 3) < 0){
+            puts("write to p9_18 failed");
             exit(1);
         }
         close(fd);
@@ -128,8 +128,8 @@ void config_pins(){
         puts("failed to open P9_21_pinmux");
         exit(-1);
     } else{
-        if (write(fd, "spi", 6) < 0){
-            printf("write to p9_21 failed");
+        if (write(fd, "spi", 3) < 0){
+            puts("write to p9_21 failed");
             exit(1);
         }
         close(fd);
@@ -140,8 +140,8 @@ void config_pins(){
         puts("failed to open P9_22_pinmux");
         exit(-1);
     } else{
-        if (write(fd, "spi_sclk", 6) < 0){
-            printf("write to p9_22 failed");
+        if (write(fd, "spi_sclk", 7) < 0){
+            puts("write to p9_22 failed");
             exit(1);
         }
         close(fd);
