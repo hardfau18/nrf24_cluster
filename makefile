@@ -31,3 +31,6 @@ clean:
 
 run: $(build_dir)/$(project).elf
 	@$(build_dir)/$(project).elf
+
+sync:
+	@rsync gireesh@10.0.1.12:projects/spi_dev/ -r /home/gireesh/spi_dev -e ssh --exclude=".git/"

@@ -140,7 +140,7 @@ void config_pins(){
         puts("failed to open P9_22_pinmux");
         exit(-1);
     } else{
-        if (write(fd, "spi_sclk", 7) < 0){
+        if (write(fd, "spi_sclk", 8) < 0){
             puts("write to p9_22 failed");
             exit(1);
         }
