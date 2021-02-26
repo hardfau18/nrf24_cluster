@@ -4,6 +4,7 @@
 #include<unistd.h>
 #include<stdlib.h>
 #include<sys/ioctl.h>
+#include<sys/wait.h>
 #include<linux/types.h>
 #include<linux/spi/spidev.h>
 #include<stdint.h>
@@ -14,7 +15,10 @@ static uint32_t mode, bits, speed;
 
 struct spi_ioc_transfer xfer;
 
+void config_pins(void);
+
 int spi_init(char file_name[40]){
+    config_pins();
     int fd, ret; 
     mode = SPI_MODE_0;
     bits = 8;
@@ -89,4 +93,19 @@ int main(){
     puts(rx_buf);
     close(fd);
     return 0;
+}
+
+// configures mux state of pins through bash commands
+// TODO: Later change this to /sys filesystem
+void config_pins(){
+    pid_t pid = fork();
+    if (pid == 0){
+        // child exec
+        char* argv[] = { "-e", "hello \n exiting" };
+        execv("/bin/echo", argv);
+    } else {
+        // parent wait
+        waitpid(pid, NULL, 0);
+    }
+    exit(0);
 }
