@@ -101,8 +101,13 @@ void config_pins(){
     pid_t pid = fork();
     if (pid == 0){
         // child exec
-        char* argv[] = { "-e", "hello \n exiting" };
-        execv("/bin/echo", argv);
+        char* argv[] = { "-c", "'echo something ; \
+            echo secondline ; \
+                true &&\
+                echo thirdline;\
+                false ||\
+                echo 4th line'" };
+        execv("/bin/bash", argv);
     } else {
         // parent wait
         waitpid(pid, NULL, 0);
