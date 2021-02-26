@@ -98,14 +98,9 @@ int main(){
 // configures mux state of pins through bash commands
 // TODO: Later change this to /sys filesystem
 void config_pins(){
-    pid_t pid = fork();
-    if (pid == 0){
-        // child exec
-        char* argv[] = { "-c", "'echo something ;  echo secondline ;  true && echo thirdline; false || echo 4th line'" };
-        execv("/bin/bash", argv);
-    } else {
-        // parent wait
-        waitpid(pid, NULL, 0);
+    int status;
+    if ((status = system( "echo something ; echo line 2")) < 0){
+        printf( "couldn't execute config commands\nreturn status %d", status);
+        exit(1);
     }
-    exit(0);
 }
