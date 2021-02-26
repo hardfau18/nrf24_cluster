@@ -9,6 +9,7 @@
 #include<linux/spi/spidev.h>
 #include<stdint.h>
 
+
 static char rx_buf[100];
 static char tx_buf[100];
 static uint32_t mode, bits, speed;
@@ -96,14 +97,53 @@ int main(){
 }
 
 // configures mux state of pins through bash commands
-// TODO: Later change this to /sys filesystem
 void config_pins(){
-    int status;
-    if ((status = system( "config-pin P9.17 spi_cs &&\
-                    config-pin P9.18 spi &&\
-                    config-pin P9.21 spi &&\
-                    config-pin P9.22 spi_sclk")) < 0){
-        printf( "couldn't execute config commands\nreturn status %d", status);
-        exit(1);
+    int fd;
+    // set P9.17
+    if ((fd = open("/sys/devices/platform/ocp/ocp:P9_17_pinmux/state", O_RDWR)) < 0){
+        puts("failed to open P9_17_pinmux");
+        exit(-1);
+    } else{
+        if (write(fd, "spi_cs", 6) < 0){
+            printf("write to p9_17 failed");
+            exit(1);
+        }
+        close(fd);
+    }
+
+    // set P9.18
+    if ((fd = open("/sys/devices/platform/ocp/ocp:P9_18_pinmux/state", O_RDWR)) < 0){
+        puts("failed to open P9_18_pinmux");
+        exit(-1);
+    } else{
+        if (write(fd, "spi", 6) < 0){
+            printf("write to p9_18 failed");
+            exit(1);
+        }
+        close(fd);
+    }
+
+    // set P9.21
+    if ((fd = open("/sys/devices/platform/ocp/ocp:P9_21_pinmux/state", O_RDWR)) < 0){
+        puts("failed to open P9_21_pinmux");
+        exit(-1);
+    } else{
+        if (write(fd, "spi", 6) < 0){
+            printf("write to p9_21 failed");
+            exit(1);
+        }
+        close(fd);
+    }
+
+    // set P9.22
+    if ((fd = open("/sys/devices/platform/ocp/ocp:P9_22_pinmux/state", O_RDWR)) < 0){
+        puts("failed to open P9_22_pinmux");
+        exit(-1);
+    } else{
+        if (write(fd, "spi_sclk", 6) < 0){
+            printf("write to p9_22 failed");
+            exit(1);
+        }
+        close(fd);
     }
 }
