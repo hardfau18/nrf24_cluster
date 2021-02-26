@@ -99,9 +99,10 @@ int main(){
 // TODO: Later change this to /sys filesystem
 void config_pins(){
     int status;
-    if ((status = system( " echo something &&\
-                    echo line 2 &&\
-                    echo line 3")) < 0){
+    if ((status = system( "config-pin P9.17 spi_cs &&\
+                    config-pin P9.18 spi &&\
+                    config-pin P9.21 spi &&\
+                    config-pin P9.22 spi_sclk")) < 0){
         printf( "couldn't execute config commands\nreturn status %d", status);
         exit(1);
     }
