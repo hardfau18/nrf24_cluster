@@ -11,7 +11,7 @@ int main(){
         return -1;
     rf_write_mem(fd, 0, &config, sizeof config);
     rf_read_mem(fd, 0, &mem_data, sizeof mem_data);
-    printf("memory content is %d, \n", mem_data);
+    printf("memory content is %x, \n", mem_data);
     close(fd);
     return 0;
 }
