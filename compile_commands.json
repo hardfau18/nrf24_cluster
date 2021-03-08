@@ -1,0 +1,15 @@
+[
+ {
+  "directory": "/home/gireesh/projects/spi_dev",
+  "arguments": [
+   "gcc",
+   "-I",
+   "/home/gireesh/projects/spi_dev/include",
+   "-o",
+   "/home/gireesh/projects/spi_dev/build/spi_dev.elf",
+   "/home/gireesh/projects/spi_dev/src/spi.c",
+   "/home/gireesh/projects/spi_dev/src/main.c"
+  ],
+  "file": "/home/gireesh/projects/spi_dev/src/main.c"
+ }
+]

@@ -1,39 +1,7 @@
-#include<stdio.h>
-#include<fcntl.h>
-#include<string.h>
-#include<unistd.h>
-#include<stdlib.h>
-#include<sys/ioctl.h>
-#include<sys/wait.h>
-#include<linux/types.h>
-#include<linux/spi/spidev.h>
-#include<stdint.h>
+#include "spi.h"
 
-
-static char rx_buf[100];
-static char tx_buf[100];
-static uint32_t mode, bits, speed;
-
+uint32_t mode, bits, speed;
 struct spi_ioc_transfer xfer;
-
-void config_pins(void);
-
-// transmits the content of buf to reciever and writes the recieved content to same buffer
-// returns the return status of ioctl transfer
-// @ fd - filedescriptor of spi transfer
-// @ len - length of the buffer
-// @ buf - transfer buffer
-int spi_transfer(int fd, uint32_t len, uint8_t* buf);
-// returns the return status of ioctl transfer
-// @ fd - filedescriptor of spi transfer
-// @ len - length of the buffer
-// @ buf - transfer buffer
-int spi_read(int fd, uint32_t len, uint8_t* buf);
-// returns the return status of ioctl transfer
-// @ fd - filedescriptor of spi transfer
-// @ len - length of the buffer
-// @ buf - transfer buffer
-int spi_write(int fd, uint32_t len, uint8_t* buf);
 
 int spi_init(char file_name[40]){
     config_pins();
@@ -86,24 +54,6 @@ int spi_init(char file_name[40]){
     return fd;
 }
 
-int main(){
-    int fd, status ;
-
-    memset(tx_buf, 0x41, 10);
-    memset(tx_buf+10, 0x42, 10);
-    tx_buf[19]=0;
-
-    // open spi device
-    if ((fd = spi_init("/dev/spidev0.0"))< 0)
-        return -1;
-
-    if (spi_read(fd, 20, (uint8_t*)tx_buf) < 0)
-        fprintf(stderr, "failed to transfer\n");
-    tx_buf[20]=0;
-    puts(tx_buf);
-    close(fd);
-    return 0;
-}
 
 // configures mux state of pins through bash commands
 void config_pins(){
