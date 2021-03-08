@@ -4,20 +4,14 @@
 char rx_buf[100];
 char tx_buf[100];
 int main(){
-    int fd, status ;
-
-    memset(tx_buf, 0x41, 10);
-    memset(tx_buf+10, 0x42, 10);
-    tx_buf[19]=0;
-
-    // open spi device
+    int fd;
+    uint8_t mem_data, config;
+    config = 0b01101000;
     if ((fd = spi_init("/dev/spidev0.0"))< 0)
         return -1;
-
-    if (spi_read(fd, 20, (uint8_t*)tx_buf) < 0)
-        fprintf(stderr, "failed to transfer\n");
-    tx_buf[20]=0;
-    puts(tx_buf);
+    rf_write_mem(fd, 0, &config, sizeof config);
+    rf_read_mem(fd, 0, &mem_data, sizeof mem_data);
+    printf("memory content is %d, \n", mem_data);
     close(fd);
     return 0;
 }

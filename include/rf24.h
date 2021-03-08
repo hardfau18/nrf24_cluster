@@ -8,7 +8,7 @@
 #define rf_read_status()
 // reads the data into buffer
 // @fd : file descriptor returned by init function
-// @return: returns status register content
+// @return: returns len of data read
 // @address: 5 bits address of the memory
 uint8_t rf_read_mem(int fd, uint8_t address, uint8_t* buf, uint8_t len);
 // writes data present in the buffer to memory
@@ -22,5 +22,6 @@ uint8_t rf_rx_data(int fd, uint8_t *buf, uint8_t len);
 // initialize radio 
 // @device: device name sysfilesystem tree
 // @return: returns a filedescriptors
+// TODO: later may be replace it by macro
 int rf_init(char* device);
 

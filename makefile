@@ -1,7 +1,7 @@
 CC := gcc
 build_dir := $(PWD)/build
 project := spi_dev
-sources := spi.c main.c
+sources := spi.c main.c rf24.c
 
 
 src_dir := $(PWD)/src

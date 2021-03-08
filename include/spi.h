@@ -34,5 +34,4 @@ int spi_write(int fd, uint32_t len, uint8_t* buf);
 // initializes spi device
 // TODO: currently using default configurations later use dynamic configurations
 // @return: file descriptor of spi
-// @file_name: name of the spi interface ex:spidev0.0
 int spi_init(char file_name[40]);
