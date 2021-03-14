@@ -118,7 +118,7 @@ int spi_transfer(int fd, uint32_t len, uint8_t* tx_buf, uint8_t* rx_buf){
 }
 
 int spi_transfer_single_byte(int fd, uint8_t *byte){
-    xfer.tx_buf = (unsigned long)&byte;
+    xfer.tx_buf = (unsigned long)byte;
     xfer.rx_buf = (unsigned long)NULL;
     xfer.len = 1;
     return ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
