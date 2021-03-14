@@ -107,14 +107,27 @@ void config_pins(){
     }
 }
 
-int spi_transfer(int fd, uint32_t len, uint8_t* buf){
+int spi_transfer(int fd, uint32_t len, uint8_t* tx_buf, uint8_t* rx_buf){
     int status;
     // same buffer can be used to read and write, checked
-    xfer.tx_buf = (unsigned long)buf;
-    xfer.rx_buf = (unsigned long)buf;
+    xfer.tx_buf = (unsigned long)tx_buf;
+    xfer.rx_buf = (unsigned long)rx_buf;
     xfer.len = len;
     status = ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
     return status;
+}
+
+int spi_transfer_single_byte(int fd, uint8_t *byte){
+    xfer.tx_buf = (unsigned long)&byte;
+    xfer.rx_buf = (unsigned long)NULL;
+    xfer.len = 1;
+    return ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
+}
+int spi_transfer_single_buf(int fd, uint32_t len, uint8_t* buf){
+    xfer.tx_buf = (unsigned long)buf;
+    xfer.rx_buf = (unsigned long)buf;
+    xfer.len = len;
+    return ioctl(fd, SPI_IOC_MESSAGE(1), &xfer);
 }
 
 // TODO change this to macro so that transfer func only used for comm

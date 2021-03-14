@@ -9,7 +9,16 @@
 #include<linux/spi/spidev.h>
 #include<stdint.h>
 
-
+// TODO: later use this method
+// #define spi_transfer_single_buf(fd, len, buf) __spi_transfer(fd, len, buf, buf)
+// #define spi_transfer_double_buf(fd, len, tx_buf, rx_buf) __spi_transfer(fd, len, tx_buf, rx_buf)
+//
+// #define __spi_transfer_mult(x,A,B,FUNC, ...)  FUNC
+// #define spi_transfer(fd, len, ...)                    __spi_transfer_mult(,##__VA_ARGS__,\
+//                                           spi_transfer_double_buf(fd, len, __VA_ARGS__),\
+//                                           spi_transfer_single_buf(fd, len, __VA_ARGS__),\
+//                                           spi_transfer_single_byte(__VA_ARGS__)\
+//                                          )
 
 
 void config_pins(void);
@@ -19,7 +28,10 @@ void config_pins(void);
 // @ fd - filedescriptor of spi transfer
 // @ len - length of the buffer
 // @ buf - transfer buffer
-int spi_transfer(int fd, uint32_t len, uint8_t* buf);
+int spi_transfer(int fd, uint32_t len, uint8_t* tx_buf, uint8_t *rx_buf);
+// TODO: remove these intermediate function and use macros
+int spi_transfer_single_byte(int fd, uint8_t* byte);
+int spi_transfer_single_buf(int fd, uint32_t len, uint8_t* buf);
 // returns the return status of ioctl transfer
 // @ fd - filedescriptor of spi transfer
 // @ len - length of the buffer
